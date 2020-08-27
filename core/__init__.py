@@ -221,6 +221,7 @@ class Download(object):
                     open_flag = False
                     if '#' in input_str:
                         open_flag = True
+                        input_str = input_str.replace('#', '')
                     self.download_queue.put((input_str, 'pixiv', open_flag, None))
 
     # 识别网站中的图片链接
