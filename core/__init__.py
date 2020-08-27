@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s-%(levelname)s:%(message)s')
 
-__version__ = '2.0'
+__version__ = '2.1'
 
 
 class Download(object):
