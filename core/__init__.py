@@ -230,7 +230,7 @@ class Download(object):
             search_handler = SearchAllResult(file, api_key=self.api_key)
             try:
                 result, short_remaining, long_remaining = search_handler.get_one_id()
-            except (ApiError, Non200Error, requests.exceptions.SSLError):
+            except (ApiError, requests.exceptions.SSLError):
                 time.sleep(20)
                 logging.info(f'{file}重新进入搜索队列')
                 self.search_queue.put(file)
@@ -240,7 +240,10 @@ class Download(object):
                 self.search_queue.put(file)
             except ApiKeyError:
                 logging.info('APIKey is wrong,please check your key')
-                exit(-1)
+                break
+            except Non200Error:
+                logging.info('一般出现此错误说明超出了查询配额，请明天再试')
+                break
             else:
                 if result is not None:
                     logging.info(f'搜索到结果 {result}')
