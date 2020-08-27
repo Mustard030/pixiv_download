@@ -1,0 +1,7 @@
+/venv/
+/build/
+/ico/*.ico
+*.cfg
+*.spec
+pt.py
+*.ini
