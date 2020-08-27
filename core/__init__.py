@@ -1,7 +1,6 @@
 import time
 from .config import *
 from .utils import *
-from .command import *
 from threading import *
 from queue import Queue
 from .search_picture import *
