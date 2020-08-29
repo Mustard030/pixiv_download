@@ -155,6 +155,7 @@ class Download(object):
                                 self.open_queue.put(path)
                         elif path is None:
                             self.download_queue.put((pixiv_id, 'pixiv', False, None))
+                            logging.info(f'{pixiv_id} 已添加到下载队列')
                     elif 'twitter' in pic_num:
                         logging.info('抱歉，暂不支持此链接')
                         # fuck twitter api
