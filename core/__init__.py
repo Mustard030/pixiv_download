@@ -34,6 +34,10 @@ class Download(object):
             self.open_flag = not self.open_flag
             logging.info(f'自动打开: {self.open_flag}')
 
+    # 显示下载队列任务数量
+    def show_download_queue(self):
+        logging.info(f'下载队列中还有{self.download_queue.qsize()}个任务')
+
     # 切换是否使用配额
     def switch_key(self):
         with self._set_lock:
@@ -131,6 +135,7 @@ class Download(object):
             '#': self.switch_open,
             'open': self.switch_open,
             '@': self.switch_key,
+            '+': self.show_download_queue,
             '!': self.quick_search,
             '！': self.quick_search,
             'download': self.reset_download,
@@ -268,7 +273,7 @@ class Download(object):
         pixiv_base_url = 'http://pixiv.re/{pixiv_id}.png'
         while True:
             number, source, open_flag, src_path = self.download_queue.get()
-            logging.info(f'下载队列中还有{self.download_queue.qsize()}个任务')
+            self.show_download_queue()
             if source == 'pixiv':
                 pixiv_url = pixiv_base_url.format(pixiv_id=number)
                 success = self.downloadIt(pixiv_url, number, open_flag, src_path)
