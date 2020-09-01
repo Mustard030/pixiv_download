@@ -18,7 +18,7 @@ class SearchAllResult:
         logging.info(f'正在搜索{self.local_path}')
         try:
             response = requests.post(self.__URL, files=files)
-        except (requests.exceptions.SSLError, requests.exceptions.ProxyError):
+        except (requests.exceptions.SSLError, requests.exceptions.ProxyError, requests.exceptions.ConnectionError):
             logging.info('Error occurred')
             raise
 

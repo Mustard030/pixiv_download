@@ -232,7 +232,7 @@ class Download(object):
             search_handler = SearchAllResult(file, api_key=self.api_key)
             try:
                 result, short_remaining, long_remaining = search_handler.get_one_id()
-            except (ApiError, requests.exceptions.SSLError):
+            except (ApiError, requests.exceptions.SSLError, requests.exceptions.ConnectionError):
                 time.sleep(20)
                 logging.info(f'{file}重新进入搜索队列')
                 self.search_queue.put(file)
@@ -273,8 +273,12 @@ class Download(object):
                 pixiv_url = pixiv_base_url.format(pixiv_id=number)
                 success = self.downloadIt(pixiv_url, number, open_flag, src_path)
                 if success and src_path:
-                    logging.info(f'{number}下载完成,删除原路径')
-                    os.remove(src_path)
+                    try:
+                        os.remove(src_path)
+                    except FileNotFoundError:
+                        logging.info(f'{src_path}已经被删除')
+                    else:
+                        logging.info(f'{number}下载完成,删除原路径')
             elif source == 'twitter':  # 开发中
                 pass
 
