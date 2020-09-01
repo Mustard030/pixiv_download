@@ -260,7 +260,7 @@ class Download(object):
                         self.download_queue.put((result, 'pixiv', False, None))
                 else:
                     send_to_bin(file, self.bin_path)
-                    logging.info(f'{file},已转移到垃圾箱')
+                    logging.info(f'{file}已转移到垃圾箱')
                 if long_remaining == '0':
                     logging.info('long_remaining == 0,sleep 1h')
                     time.sleep(3600)
@@ -284,6 +284,9 @@ class Download(object):
                         logging.info(f'{src_path}已经被删除')
                     else:
                         logging.info(f'{number}下载完成,删除原路径')
+                elif not success:
+                    send_to_bin(src_path,self.bin_path)
+                    logging.info(f'{src_path}已转移到垃圾箱')
             elif source == 'twitter':  # 开发中
                 pass
 
