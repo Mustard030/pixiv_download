@@ -285,8 +285,9 @@ class Download(object):
                     else:
                         logging.info(f'{number}下载完成,删除原路径')
                 elif success is False:
-                    send_to_bin(src_path, self.bin_path)
-                    logging.info(f'{src_path}已转移到垃圾箱')
+                    if src_path is not None:
+                        send_to_bin(src_path, self.bin_path)
+                        logging.info(f'{src_path}已转移到垃圾箱')
             elif source == 'twitter':  # 开发中
                 pass
 
