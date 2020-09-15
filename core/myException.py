@@ -35,3 +35,11 @@ class Non200Error(Exception):
     def __str__(self):
         logging.info(self.errorString)
         return 'Non200Error'
+
+
+class SearchError(Exception):
+    pass
+
+
+class NoneResultError(Exception):
+    pass
