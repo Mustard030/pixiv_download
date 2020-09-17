@@ -1,7 +1,6 @@
 import re
 import os
 import shutil
-import requests
 
 
 class Utils(object):
@@ -39,7 +38,7 @@ class Utils(object):
     # 格式化图片id XXX-X -> XXX_pX.png
     @staticmethod
     def to_pid(id_p):
-        found = re.findall('(\d{8})(.*?)$', id_p)[0]
+        found = re.findall(r'(\d{8})(.*?)$', id_p)[0]
         if found[1]:
             return found[0] + '_p' + str(abs(int(found[1])) - 1) + '.png'
         else:
@@ -129,7 +128,7 @@ class Utils(object):
     # 获得pixiv代理的链接
     # 多图情况将在download方法中处理
     @staticmethod
-    def get_pixiv_url(src):
+    def get_pixiv_id(src):
         pixiv_id = re.search(r'\d{8}', src).group()
         return pixiv_id
 
@@ -141,6 +140,19 @@ class Utils(object):
         # print(pics)
         # for pic in pics:
         #     yield pic
+
+    # 文件存在检查 忽略'#'
+    # (xxx.jpg/.png or XXX-X) folder_list -> real_folder\xxx.jpg
+    @staticmethod
+    def is_exist_in(input_str: str, folder_list) -> str:
+        # input_str maybe whole_file_path or xxx-x
+        if os.path.isfile(input_str):
+            filename = os.path.basename(input_str)
+            return get_real_path(filename, folder_list)
+        else:  # is xxx-x or xxx
+            input_str = input_str.replace('#', '')
+            pid = to_pid(input_str)  # return XXX_pX.png
+            return get_real_path(pid, folder_list)
 
 
 helper = Utils.helper
@@ -154,8 +166,9 @@ unzip_the_folder = Utils.unzip_the_folder
 right_str = Utils.right_str
 open_it = Utils.open_it
 get_real_path = Utils.get_real_path
-get_pixiv_url = Utils.get_pixiv_url
+get_pixiv_id = Utils.get_pixiv_id
 get_twitter_url = Utils.get_twitter_url
+is_exist_in = Utils.is_exist_in
 
 # 搜图配置项
 index_hmags = '0'
@@ -172,7 +185,6 @@ index_drawr = '0'  # 1
 index_nijie = '0'  # 1
 index_yandere = '0'  # 1
 index_animeop = '0'
-index_reserved = '0'
 index_shutterstock = '0'
 index_fakku = '0'
 index_hmisc = '0'
@@ -196,7 +208,7 @@ index_pawoo = '0'  # 1
 index_madokami = '0'
 index_mangadex = '0'
 
-db_bitmask = int( \
+db_bitmask = int(
     index_mangadex + index_madokami + index_pawoo + index_da + \
     index_portalgraphics + index_bcycosplay + index_bcyillust + \
     index_idolcomplex + index_e621 + index_animepictures + \
@@ -206,5 +218,5 @@ db_bitmask = int( \
     index_reserved + index_animeop + index_yandere + index_nijie + \
     index_drawr + index_danbooru + index_seigaillust + index_anime + \
     index_pixivhistorical + index_pixiv + index_ddbsamples + \
-    index_ddbobjects + index_hcg + index_hanime + index_hmags \
+    index_ddbobjects + index_hcg + index_hanime + index_hmags
     , 2)
