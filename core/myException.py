@@ -43,3 +43,7 @@ class SearchError(Exception):
 
 class NoneResultError(Exception):
     pass
+
+
+class ServerError(Exception):
+    pass

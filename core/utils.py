@@ -93,7 +93,7 @@ class Utils(object):
 
     # 检查输入格式
     @staticmethod
-    def right_str(input_str):
+    def right_string(input_str):
         if input_str[-1] == '#':
             input_str = input_str[:-1]
         split_num = input_str.split('-')
@@ -107,7 +107,7 @@ class Utils(object):
     def open_it(_queue, file_path):
         _queue.put(file_path)
 
-    # 获得一个真实存在的路径
+    # 获得图片的本地的路径
     @staticmethod
     def get_real_path(filename, path_list: list):
         suffix = os.path.splitext(filename)[-1]
@@ -129,8 +129,11 @@ class Utils(object):
     # 多图情况将在download方法中处理
     @staticmethod
     def get_pixiv_id(src):
-        pixiv_id = re.search(r'\d{8}', src).group()
-        return pixiv_id
+        result = re.search(r'\d{8}', src)
+        if isinstance(result, re.Match):
+            return result.group()
+
+        return None
 
     # 获得twitter代理的链接
     @staticmethod
@@ -144,7 +147,7 @@ class Utils(object):
     # 文件存在检查 忽略'#'
     # (xxx.jpg/.png or XXX-X) folder_list -> real_folder\xxx.jpg
     @staticmethod
-    def is_exist_in(input_str: str, folder_list) -> str:
+    def is_exist_in(input_str: str, folder_list: list) -> str:
         # input_str maybe whole_file_path or xxx-x
         if os.path.isfile(input_str):
             filename = os.path.basename(input_str)
@@ -154,6 +157,20 @@ class Utils(object):
             pid = to_pid(input_str)  # return XXX_pX.png
             return get_real_path(pid, folder_list)
 
+    # 是否为网址
+    @staticmethod
+    def is_url(url):
+        return re.search(r'[a-zA-z]+://[^\s]*', url)
+
+    # 判断是否pixiv或其代理的网址
+    @staticmethod
+    def is_pixiv_url(url):
+        return ('pixiv' in url) and ('illust' in url or 'artworks' in url or '/i/' in url or '.re' in url)
+
+    # 判断是否为twitter网址
+    @staticmethod
+    def is_twitter_url(url):
+        return 'twitter' in url
 
 helper = Utils.helper
 get_url = Utils.get_url
@@ -163,12 +180,15 @@ send_to_bin = Utils.send_to_bin
 useful_name = Utils.useful_name
 format_input_str = Utils.format_input_str
 unzip_the_folder = Utils.unzip_the_folder
-right_str = Utils.right_str
+right_string = Utils.right_string
 open_it = Utils.open_it
 get_real_path = Utils.get_real_path
 get_pixiv_id = Utils.get_pixiv_id
 get_twitter_url = Utils.get_twitter_url
 is_exist_in = Utils.is_exist_in
+is_url = Utils.is_url
+is_pixiv_url = Utils.is_pixiv_url
+is_twitter_url = Utils.is_twitter_url
 
 # 搜图配置项
 index_hmags = '0'

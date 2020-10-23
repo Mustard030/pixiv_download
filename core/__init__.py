@@ -153,7 +153,7 @@ class Download(object):
                     cmd()
                 elif re.search(r'[a-zA-z]+://[^\s]*', pic_num):  # 网址格式
                     if 'pixiv' in pic_num and ('illust' in pic_num or 'artworks' in pic_num):
-                        pixiv_id = get_pixiv_url(pic_num)
+                        pixiv_id = get_pixiv_id(pic_num)
                         if path := self.is_exist(pixiv_id):
                             logging.info(f'{pixiv_id} 已存在')
                             if self.open_flag:
@@ -214,7 +214,7 @@ class Download(object):
                     self.input_queue.put(file)
                 #
             else:  # many situations but
-                if not right_str(input_str):  # 格式错误
+                if not right_string(input_str):  # 格式错误
                     logging.info(f'{input_str} 格式错误')
                 # 格式正确且存在
                 elif exist_path := self.is_exist(input_str):

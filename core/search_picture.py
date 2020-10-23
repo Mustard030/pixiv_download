@@ -1,5 +1,6 @@
 from .utils import *
 from .myException import *
+import requests
 
 
 class SearchAllResult:

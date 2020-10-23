@@ -1,5 +1,5 @@
-from core import *
+from core import test
 
 if __name__ == '__main__':
-    snd = Download()
+    snd = test.Download()
     snd.run()
